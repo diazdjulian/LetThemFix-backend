@@ -12,10 +12,9 @@ import java.util.List;
  *
  * @author Sebas
  */
-public class Cliente {
+public class Profesional {
 
-    private static Long numeradorCliente = 0L;
-    private Long idCliente;
+    private Long idProfesional;
     private String tipoDocumento;
     private String nroDocumento;
     private String nombre;
@@ -23,44 +22,19 @@ public class Cliente {
     private Calendar fechaNacimiento;
     private int telefono;
     private String mail;
-    private String domicilio;
+    private String domatricula;
     private String localidad;
-    private float calificacionPromedio;
+    private float valoracion;
+    private Especialidad especialidad;
     private List<Valoracion> valoraciones;
+    
 
-    public Cliente(String tipoDocumento, String nroDocumento, String nombre, String apellido, Calendar fechaNacimiento, int telefono, String mail, String domicilio, String localidad, float calificacionPromedio) {
-
-        this.idCliente = numeradorCliente++;
-        this.tipoDocumento = tipoDocumento;
-        this.nroDocumento = nroDocumento;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.fechaNacimiento = fechaNacimiento;
-        this.telefono = telefono;
-        this.mail = mail;
-        this.domicilio = domicilio;
-        this.localidad = localidad;
-
+    public Long getIdProfesional() {
+        return idProfesional;
     }
 
-    public float calcularCalificacionPromedio() {
-        float total = 0L;
-        for (Valoracion valoracion : this.getValoraciones()) {
-            total = total + valoracion.getCalificacion();
-        }
-        if (total != 0L) {
-            return (this.calificacionPromedio = total / this.getValoraciones().size());
-        } else {
-            return 0L;
-        }
-    }
-
-    public Long getIdCliente() {
-        return idCliente;
-    }
-
-    public void setIdCliente(Long idCliente) {
-        this.idCliente = idCliente;
+    public void setIdProfesional(Long idProfesional) {
+        this.idProfesional = idProfesional;
     }
 
     public String getTipoDocumento() {
@@ -119,12 +93,12 @@ public class Cliente {
         this.mail = mail;
     }
 
-    public String getDomicilio() {
-        return domicilio;
+    public String getDomatricula() {
+        return domatricula;
     }
 
-    public void setDomicilio(String domicilio) {
-        this.domicilio = domicilio;
+    public void setDomatricula(String domatricula) {
+        this.domatricula = domatricula;
     }
 
     public String getLocalidad() {
@@ -135,12 +109,20 @@ public class Cliente {
         this.localidad = localidad;
     }
 
-    public float getCalificacionPromedio() {
-        return calificacionPromedio;
+    public float getValoracion() {
+        return valoracion;
     }
 
-    public void setCalificacionPromedio(float calificacionPromedio) {
-        this.calificacionPromedio = calificacionPromedio;
+    public void setValoracion(float valoracion) {
+        this.valoracion = valoracion;
+    }
+
+    public Especialidad getEspecialidad() {
+        return especialidad;
+    }
+
+    public void setEspecialidad(Especialidad especialidad) {
+        this.especialidad = especialidad;
     }
 
     public List<Valoracion> getValoraciones() {
@@ -150,5 +132,7 @@ public class Cliente {
     public void setValoraciones(List<Valoracion> valoraciones) {
         this.valoraciones = valoraciones;
     }
-
+    
+    
+    
 }

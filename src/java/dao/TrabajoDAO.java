@@ -1,21 +1,27 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package dao;
 
+import excepciones.AccesoException;
+import excepciones.ConexionException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
-
-import excepciones.AccesoException;
-import excepciones.ClienteException;
-import excepciones.ConexionException;
-
 import java.sql.SQLException;
+import java.sql.Statement;
+import negocio.Presupuesto;
+import negocio.Trabajo;
 
-import negocio.Cliente;
+/**
+ *
+ * @author Sebas
+ */
+public class TrabajoDAO {
 
-public class ClienteDAO {
-
-    static public Cliente obtenerClientePorDni(String dni) throws ConexionException, AccesoException/*, ClienteException*/ {
+    static public Trabajo obtenerTrabajoPorId(Long idTrabajo) throws ConexionException, AccesoException/*, ClienteException*/ {
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -32,7 +38,7 @@ public class ClienteDAO {
         } catch (SQLException e1) {
             throw new AccesoException("Error de acceso");
         }
-        String SQL = "SELECT  * FROM Clientes where dni = " + dni;
+        String SQL = "SELECT  * FROM Trabajos where idTrabajo = " + idTrabajo;
         try {
             rs = stmt.executeQuery(SQL);
         } catch (SQLException e1) {
@@ -41,8 +47,8 @@ public class ClienteDAO {
         try {
 
             if (rs.next()) {
-                Cliente cliente = new Cliente(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getDate(6), rs.getInt(7), rs.getString(8), rs.getString(9), rs.getString(10));
-                return cliente;
+                Trabajo trabajo = new Trabajo(rs.getLong(1), rs.getDate(2), rs.getDate(3), rs.getDate(4), rs.getString(5), rs.getString(6));
+                return trabajo;
             } else {
                 return null;
                 //throw new ClienteException("El cliente con DNI: " + dni + " no existe");
@@ -52,7 +58,7 @@ public class ClienteDAO {
         }
     }
 
-    static public void grabarCliente(Cliente c) throws ConexionException, AccesoException {
+    static public void grabarTrabajo(Trabajo trabajo) throws ConexionException, AccesoException {
         Connection con;
 
         try {
@@ -64,17 +70,13 @@ public class ClienteDAO {
 
         PreparedStatement stm;
         try {
-            stm = con.prepareStatement("insert into Clientes values(?,?,?,?,?,?,?,?,?,?)");
-            stm.setString(1, c.getNombre());
-            stm.setString(2, c.getApellido());
-            stm.setString(3, c.getTipoDocumento());
-            stm.setString(4, c.getNroDocumento());
-            stm.setDate(5, new java.sql.Date(c.getFechaNacimiento().getTime()));
-            stm.setInt(6, c.getTelefono());
-            stm.setString(7, c.getMail());
-            stm.setString(8, c.getDomicilio());
-            stm.setString(9, c.getLocalidad());
-            stm.setFloat(10, c.getCalificacionPromedio());
+            stm = con.prepareStatement("insert into Trabajos values(?,?,?,?,?)");
+            stm.setDate(1, new java.sql.Date(trabajo.getFechaAceptacion().getTime()));
+            stm.setDate(2, new java.sql.Date(trabajo.getFechaInicio().getTime()));
+            stm.setDate(3, new java.sql.Date(trabajo.getFechaFin().getTime()));
+            stm.setString(4, trabajo.getObservaciones());
+            stm.setString(5, trabajo.getEstado());
+
 
         } catch (SQLException e) {
             throw new AccesoException("Error de acceso");

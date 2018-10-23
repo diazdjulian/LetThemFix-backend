@@ -5,20 +5,30 @@
  */
 package negocio;
 
-import java.util.Calendar;
+import java.util.Date;
 
 /**
  *
  * @author Sebas
  */
 public class Trabajo {
-    
-  private Long idTrabajo;
-  private Calendar fechaAceptacion;
-  private Calendar fechaInicio;
-  private Calendar fechaFin;
-  private String observaciones;
-  private String estado;
+
+    private Long idTrabajo;
+    private Date fechaAceptacion;
+    private Date fechaInicio;
+    private Date fechaFin;
+    private String observaciones;
+    private String estado;
+
+    public Trabajo(Long idTraajo, Date fechaAceptacion, Date fechaInicio, Date fechaFin, String observaciones, String estado) {
+        
+        this.idTrabajo = idTraajo;
+        this.fechaAceptacion = fechaAceptacion;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.observaciones = observaciones;
+        this.estado = estado;
+    }
 
     public Long getIdTrabajo() {
         return idTrabajo;
@@ -28,27 +38,27 @@ public class Trabajo {
         this.idTrabajo = idTrabajo;
     }
 
-    public Calendar getFechaAceptacion() {
+    public Date getFechaAceptacion() {
         return fechaAceptacion;
     }
 
-    public void setFechaAceptacion(Calendar fechaAceptacion) {
+    public void setFechaAceptacion(Date fechaAceptacion) {
         this.fechaAceptacion = fechaAceptacion;
     }
 
-    public Calendar getFechaInicio() {
+    public Date getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(Calendar fechaInicio) {
+    public void setFechaInicio(Date fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public Calendar getFechaFin() {
+    public Date getFechaFin() {
         return fechaFin;
     }
 
-    public void setFechaFin(Calendar fechaFin) {
+    public void setFechaFin(Date fechaFin) {
         this.fechaFin = fechaFin;
     }
 
@@ -67,8 +77,5 @@ public class Trabajo {
     public void setEstado(String estado) {
         this.estado = estado;
     }
-  
-  
-  
-  
+
 }

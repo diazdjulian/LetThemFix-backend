@@ -17,6 +17,14 @@ public class Problema {
     private Presupuesto presupuestoAceptado;
     private Trabajo trabajo;
 
+    public Problema(Long idProblema, String descripcion, Long idRubro, Long idPresupuesto, Long idTrabajo){
+        
+        this.idProblema = idProblema;
+        this.descripcion = descripcion;
+        
+    
+    }
+    
     public Long getIdProblema() {
         return idProblema;
     }

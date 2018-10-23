@@ -10,12 +10,21 @@ package negocio;
  * @author Sebas
  */
 public class Presupuesto {
-    
+
     private Long idPresupuesto;
     private String observacion;
     private float valor;
     private int cantJornadasLaborables;
     private float valorMateriales;
+
+    public Presupuesto(Long idPresupuesto, String observacion, float valor, int cantidadJornadas, float materiales) {
+        this.idPresupuesto = idPresupuesto;
+        this.observacion = observacion;
+        this.valor = valor;
+        this.cantJornadasLaborables = cantidadJornadas;
+        this.valorMateriales = materiales;
+
+    }
 
     public Long getIdPresupuesto() {
         return idPresupuesto;
@@ -56,7 +65,5 @@ public class Presupuesto {
     public void setValorMateriales(float valorMateriales) {
         this.valorMateriales = valorMateriales;
     }
-    
-    
-    
+
 }

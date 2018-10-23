@@ -18,8 +18,8 @@ public class Test {
         try {
 
             Date fecha = formatter.parse(dateInString);
-            Cliente cliente = new Cliente("DNI", "32523092", "sebastian", "Roidzaid", fecha, 1562701114, "sebastian.roidzaid@gmail.com", "pepe 345", "Moron");
-            cliente.guardar();
+//            Cliente cliente = new Cliente("DNI", "32523092", "sebastian", "Roidzaid", fecha, 1562701114, "sebastian.roidzaid@gmail.com", "pepe 345", "Moron");
+//            cliente.guardar();
         } catch (ParseException e) {
             e.printStackTrace();
         }

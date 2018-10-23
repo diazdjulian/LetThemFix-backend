@@ -8,7 +8,6 @@ package negocio;
 import dao.ClienteDAO;
 import excepciones.AccesoException;
 import excepciones.ConexionException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +17,6 @@ import java.util.List;
  */
 public class Cliente {
     
-    private static Long numeradorCliente = 0L;
     private Long idCliente;
     private String tipoDocumento;
     private String nroDocumento;
@@ -32,9 +30,9 @@ public class Cliente {
     private float calificacionPromedio;
     private List<Valoracion> valoraciones;
     
-    public Cliente(String tipoDocumento, String nroDocumento, String nombre, String apellido, Date fechaNacimiento, int telefono, String mail, String domicilio, String localidad) {
+    public Cliente(Long idCliente, String nombre, String apellido, String tipoDocumento, String nroDocumento, Date fechaNacimiento, int telefono, String mail, String domicilio, String localidad) {
         
-        this.idCliente = numeradorCliente++;
+        this.idCliente = idCliente;
         this.tipoDocumento = tipoDocumento;
         this.nroDocumento = nroDocumento;
         this.nombre = nombre;
@@ -105,13 +103,6 @@ public class Cliente {
         this.apellido = apellido;
     }
     
-    public static Long getNumeradorCliente() {
-        return numeradorCliente;
-    }
-    
-    public static void setNumeradorCliente(Long numeradorCliente) {
-        Cliente.numeradorCliente = numeradorCliente;
-    }
     
     public Date getFechaNacimiento() {
         return fechaNacimiento;

@@ -6,6 +6,7 @@
 package negocio;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,19 +16,34 @@ import java.util.List;
 public class Profesional {
 
     private Long idProfesional;
-    private String tipoDocumento;
-    private String nroDocumento;
     private String nombre;
     private String apellido;
-    private Calendar fechaNacimiento;
+    private String tipoDocumento;
+    private int nroDocumento;
+    private Date fechaNacimiento;
     private int telefono;
     private String mail;
-    private String domatricula;
+    private String matricula;
     private String localidad;
     private float valoracion;
     private Especialidad especialidad;
     private List<Valoracion> valoraciones;
-    
+
+    public Profesional(Long idProfesional, String nombre, String apellido, String tipoDocumento, int nroDocumento, Date fechaNacimiento, int telefono, String mail, String matricula, String localidad) {
+        
+        this.idProfesional = idProfesional;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.tipoDocumento = tipoDocumento;
+        this.nroDocumento = nroDocumento;
+        this.fechaNacimiento = fechaNacimiento;
+        this.telefono = telefono;
+        this.mail = mail;
+        this.matricula =  matricula;
+        this.localidad = localidad;
+        this.valoracion = 0f;
+
+    }
 
     public Long getIdProfesional() {
         return idProfesional;
@@ -45,11 +61,11 @@ public class Profesional {
         this.tipoDocumento = tipoDocumento;
     }
 
-    public String getNroDocumento() {
+    public int getNroDocumento() {
         return nroDocumento;
     }
 
-    public void setNroDocumento(String nroDocumento) {
+    public void setNroDocumento(int nroDocumento) {
         this.nroDocumento = nroDocumento;
     }
 
@@ -69,11 +85,11 @@ public class Profesional {
         this.apellido = apellido;
     }
 
-    public Calendar getFechaNacimiento() {
+    public Date getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(Calendar fechaNacimiento) {
+    public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 
@@ -93,12 +109,12 @@ public class Profesional {
         this.mail = mail;
     }
 
-    public String getDomatricula() {
-        return domatricula;
+    public String getMatricula() {
+        return matricula;
     }
 
-    public void setDomatricula(String domatricula) {
-        this.domatricula = domatricula;
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
     }
 
     public String getLocalidad() {
@@ -132,7 +148,5 @@ public class Profesional {
     public void setValoraciones(List<Valoracion> valoraciones) {
         this.valoraciones = valoraciones;
     }
-    
-    
-    
+
 }

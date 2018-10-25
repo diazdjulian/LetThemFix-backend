@@ -4,9 +4,25 @@
         <servlet-name>actionClientes</servlet-name>
         <servlet-class>servlets.actionClientes</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>actionProfesionales</servlet-name>
+        <servlet-class>servlets.actionProfesionales</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>actionLogin</servlet-name>
+        <servlet-class>servlets.actionLogin</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>actionLogin</servlet-name>
+        <url-pattern>/actionLogin</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>actionClientes</servlet-name>
         <url-pattern>/actionClientes</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>actionProfesionales</servlet-name>
+        <url-pattern>/actionProfesionales</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

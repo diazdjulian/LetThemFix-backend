@@ -5,6 +5,9 @@
  */
 package negocio;
 
+import dao.ProfesionalDAO;
+import excepciones.AccesoException;
+import excepciones.ConexionException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -18,135 +21,190 @@ public class Profesional {
     private Long idProfesional;
     private String nombre;
     private String apellido;
-    private String tipoDocumento;
-    private int nroDocumento;
+    private String usuario;
+    private String password;
+    private String nroFiscal;
     private Date fechaNacimiento;
     private int telefono;
     private String mail;
-    private String matricula;
+    private String domicilio;
+    private int altura;
     private String localidad;
-    private float valoracion;
-    private Especialidad especialidad;
+    private String provincia;
+    private float calificacionPromedio;
     private List<Valoracion> valoraciones;
 
-    public Profesional(Long idProfesional, String nombre, String apellido, String tipoDocumento, int nroDocumento, Date fechaNacimiento, int telefono, String mail, String matricula, String localidad) {
+    public Profesional(String nombre, String apellido, String usuario, String password, String nroFiscal, Date fechaNacimiento, int telefono, String mail, String domicilio, int altura, String localidad, String provincia) {
+       
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.usuario = usuario;
+        this.password = password;
+        this.nroFiscal = nroFiscal;
+        this.fechaNacimiento = fechaNacimiento;
+        this.telefono = telefono;
+        this.mail = mail;
+        this.domicilio = domicilio;
+        this.altura = altura;
+        this.localidad = localidad;
+        this.provincia = provincia;
+        this.calificacionPromedio = 0;
+        
+    }
+    
+    public Profesional(Long idProfesional, String nombre, String apellido, String usuario, String password, String nroFiscal, Date fechaNacimiento, int telefono, String mail, String domicilio, int altura, String localidad, String provincia) {
         
         this.idProfesional = idProfesional;
         this.nombre = nombre;
         this.apellido = apellido;
-        this.tipoDocumento = tipoDocumento;
-        this.nroDocumento = nroDocumento;
+        this.usuario = usuario;
+        this.password = password;
+        this.nroFiscal = nroFiscal;
         this.fechaNacimiento = fechaNacimiento;
         this.telefono = telefono;
         this.mail = mail;
-        this.matricula =  matricula;
+        this.domicilio = domicilio;
+        this.altura = altura;
         this.localidad = localidad;
-        this.valoracion = 0f;
-
+        this.provincia = provincia;
+        this.calificacionPromedio = 0;
+        
     }
-
+    
+    public float calcularCalificacionPromedio() {
+        float total = 0L;
+        for (Valoracion valoracion : this.getValoraciones()) {
+            total = total + valoracion.getCalificacion();
+        }
+        if (total != 0L) {
+            return (this.calificacionPromedio = total / this.getValoraciones().size());
+        } else {
+            return 0L;
+        }
+    }
+    
+    public void guardar() throws ConexionException, AccesoException {
+        ProfesionalDAO.grabarProfesional(this);
+    }
+    
     public Long getIdProfesional() {
         return idProfesional;
     }
-
+    
     public void setIdProfesional(Long idProfesional) {
         this.idProfesional = idProfesional;
     }
-
-    public String getTipoDocumento() {
-        return tipoDocumento;
+    
+    public String getNroFiscal() {
+        return nroFiscal;
     }
-
-    public void setTipoDocumento(String tipoDocumento) {
-        this.tipoDocumento = tipoDocumento;
+    
+    public void setNroFiscal(String nroFiscal) {
+        this.nroFiscal = nroFiscal;
     }
-
-    public int getNroDocumento() {
-        return nroDocumento;
-    }
-
-    public void setNroDocumento(int nroDocumento) {
-        this.nroDocumento = nroDocumento;
-    }
-
+    
     public String getNombre() {
         return nombre;
     }
-
+    
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
+    
     public String getApellido() {
         return apellido;
     }
-
+    
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
-
+       
     public Date getFechaNacimiento() {
         return fechaNacimiento;
     }
-
+    
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
-
+    
     public int getTelefono() {
         return telefono;
     }
-
+    
     public void setTelefono(int telefono) {
         this.telefono = telefono;
     }
-
+    
     public String getMail() {
         return mail;
     }
-
+    
     public void setMail(String mail) {
         this.mail = mail;
     }
-
-    public String getMatricula() {
-        return matricula;
+    
+    public String getDomicilio() {
+        return domicilio;
     }
-
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
+    
+    public void setDomicilio(String domicilio) {
+        this.domicilio = domicilio;
     }
-
+    
     public String getLocalidad() {
         return localidad;
     }
-
+    
     public void setLocalidad(String localidad) {
         this.localidad = localidad;
     }
-
-    public float getValoracion() {
-        return valoracion;
+    
+    public float getCalificacionPromedio() {
+        return calificacionPromedio;
     }
-
-    public void setValoracion(float valoracion) {
-        this.valoracion = valoracion;
+    
+    public void setCalificacionPromedio(float calificacionPromedio) {
+        this.calificacionPromedio = calificacionPromedio;
     }
-
-    public Especialidad getEspecialidad() {
-        return especialidad;
-    }
-
-    public void setEspecialidad(Especialidad especialidad) {
-        this.especialidad = especialidad;
-    }
-
+    
     public List<Valoracion> getValoraciones() {
         return valoraciones;
     }
-
+    
     public void setValoraciones(List<Valoracion> valoraciones) {
         this.valoraciones = valoraciones;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public int getAltura() {
+        return altura;
+    }
+
+    public String getProvincia() {
+        return provincia;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setAltura(int altura) {
+        this.altura = altura;
+    }
+
+    public void setProvincia(String provincia) {
+        this.provincia = provincia;
     }
 
 }

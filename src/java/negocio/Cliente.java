@@ -5,6 +5,8 @@
  */
 package negocio;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import dao.ClienteDAO;
 import excepciones.AccesoException;
 import excepciones.ConexionException;
@@ -18,30 +20,54 @@ import java.util.List;
 public class Cliente {
     
     private Long idCliente;
-    private String tipoDocumento;
-    private String nroDocumento;
     private String nombre;
     private String apellido;
+    private String usuario;
+    private String password;
+    private String nroFiscal;
     private Date fechaNacimiento;
     private int telefono;
     private String mail;
     private String domicilio;
+    private int altura;
     private String localidad;
+    private String provincia;
     private float calificacionPromedio;
     private List<Valoracion> valoraciones;
     
-    public Cliente(Long idCliente, String nombre, String apellido, String tipoDocumento, String nroDocumento, Date fechaNacimiento, int telefono, String mail, String domicilio, String localidad) {
-        
-        this.idCliente = idCliente;
-        this.tipoDocumento = tipoDocumento;
-        this.nroDocumento = nroDocumento;
+    public Cliente(String nombre, String apellido, String usuario, String password, String nroFiscal, Date fechaNacimiento, int telefono, String mail, String domicilio, int altura, String localidad, String provincia) {
+       
         this.nombre = nombre;
         this.apellido = apellido;
+        this.usuario = usuario;
+        this.password = password;
+        this.nroFiscal = nroFiscal;
         this.fechaNacimiento = fechaNacimiento;
         this.telefono = telefono;
         this.mail = mail;
         this.domicilio = domicilio;
+        this.altura = altura;
         this.localidad = localidad;
+        this.provincia = provincia;
+        this.calificacionPromedio = 0;
+        
+    }
+    
+    public Cliente(Long idCliente, String nombre, String apellido, String usuario, String password, String nroFiscal, Date fechaNacimiento, int telefono, String mail, String domicilio, int altura, String localidad, String provincia) {
+        
+        this.idCliente = idCliente;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.usuario = usuario;
+        this.password = password;
+        this.nroFiscal = nroFiscal;
+        this.fechaNacimiento = fechaNacimiento;
+        this.telefono = telefono;
+        this.mail = mail;
+        this.domicilio = domicilio;
+        this.altura = altura;
+        this.localidad = localidad;
+        this.provincia = provincia;
         this.calificacionPromedio = 0;
         
     }
@@ -71,20 +97,12 @@ public class Cliente {
         this.idCliente = idCliente;
     }
     
-    public String getTipoDocumento() {
-        return tipoDocumento;
+    public String getNroFiscal() {
+        return nroFiscal;
     }
     
-    public void setTipoDocumento(String tipoDocumento) {
-        this.tipoDocumento = tipoDocumento;
-    }
-    
-    public String getNroDocumento() {
-        return nroDocumento;
-    }
-    
-    public void setNroDocumento(String nroDocumento) {
-        this.nroDocumento = nroDocumento;
+    public void setNroFiscal(String nroFiscal) {
+        this.nroFiscal = nroFiscal;
     }
     
     public String getNombre() {
@@ -102,8 +120,7 @@ public class Cliente {
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
-    
-    
+       
     public Date getFechaNacimiento() {
         return fechaNacimiento;
     }
@@ -159,5 +176,38 @@ public class Cliente {
     public void setValoraciones(List<Valoracion> valoraciones) {
         this.valoraciones = valoraciones;
     }
-    
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public int getAltura() {
+        return altura;
+    }
+
+    public String getProvincia() {
+        return provincia;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setAltura(int altura) {
+        this.altura = altura;
+    }
+
+    public void setProvincia(String provincia) {
+        this.provincia = provincia;
+    }
+
+
 }

@@ -5,12 +5,22 @@
  */
 package servlets;
 
+import excepciones.AccesoException;
+import excepciones.ConexionException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import negocio.Cliente;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import dao.ClienteDAO;
 
 /**
  *
@@ -29,24 +39,53 @@ public class actionClientes extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        
-        String nombre = (String) request.getParameter("nombre");
-        
-        
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet actionClientes</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet actionClientes at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        String responseToConsumer = "";
+
+        if ("POST".equals(request.getMethod())) {
+            String body = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
+            Gson params = new GsonBuilder().setDateFormat("DD/MM/YYYY").create();
+            Cliente c = params.fromJson(body, Cliente.class);
+           
+            try {
+                c.guardar();
+                responseToConsumer = new Gson().toJson("{\"data\":\"Usuario guardado\"}");
+                response.setStatus(HttpServletResponse.SC_OK);
+            } catch (ConexionException ex) {
+                Logger.getLogger(actionClientes.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al guardar usuario\"}");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (AccesoException ex) {
+                Logger.getLogger(actionClientes.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al guardar usuario\"}");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+        } else if ("GET".equals(request.getMethod())) {
+            String dni = request.getParameter("dni");
+            Cliente c;
+            try {
+                c = ClienteDAO.obtenerClientePorDni(dni);
+                responseToConsumer = new Gson().toJson(c);
+                response.setStatus(HttpServletResponse.SC_OK);
+            } catch (ConexionException ex) {
+                Logger.getLogger(actionClientes.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al recuperar usuario\"}");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (AccesoException ex) {
+                Logger.getLogger(actionClientes.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al recuperar usuario\"}");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+            
+        } else {
+            responseToConsumer = new Gson().toJson("{\"error\":\"Metodo no correcto\"}");
+            response.setStatus(HttpServletResponse.SC_NOT_IMPLEMENTED);
         }
+
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        out.print(responseToConsumer);
+        out.flush();
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -61,6 +100,7 @@ public class actionClientes extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        setAccessControlHeaders(response);
         processRequest(request, response);
     }
 
@@ -75,6 +115,7 @@ public class actionClientes extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        setAccessControlHeaders(response);
         processRequest(request, response);
     }
 
@@ -88,4 +129,17 @@ public class actionClientes extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    //for Preflight
+    @Override
+    protected void doOptions(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+            setAccessControlHeaders(resp);
+        resp.setStatus(HttpServletResponse.SC_OK);
+    }
+    
+    private void setAccessControlHeaders(HttpServletResponse resp) {
+        resp.setHeader("Access-Control-Allow-Origin", "*");
+        resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, X-Requested-With");
+        resp.setHeader("Access-Control-Allow-Methods", "GET, POST");
+    }
 }

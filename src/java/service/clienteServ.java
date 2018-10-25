@@ -5,13 +5,15 @@
  */
 package service;
 
+import java.util.Date;
+
 /**
  *
  * @author Sebas
  */
 public interface clienteServ {
     
-    public void crearCliente();
+    public void crearCliente(String nombre, String apellido, String usuario, String password, String nroFiscal, Date fechaNacimiento, int telefono, String mail, String domicilio, int altura, String localidad, String provincia);
     
     
 }

@@ -14,6 +14,15 @@ public class Especialidad {
     private Long idEspecialidad;
     private String descripcion;
 
+    public Especialidad(Long idEspecialidad, String descripcion) {
+        this.idEspecialidad = idEspecialidad;
+        this.descripcion = descripcion;
+    }
+
+    public Especialidad(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    
     public Long getIdEspecialidad() {
         return idEspecialidad;
     }

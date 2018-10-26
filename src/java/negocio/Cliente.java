@@ -53,7 +53,7 @@ public class Cliente {
         
     }
     
-    public Cliente(Long idCliente, String nombre, String apellido, String usuario, String password, String nroFiscal, Date fechaNacimiento, int telefono, String mail, String domicilio, int altura, String localidad, String provincia) {
+    public Cliente(Long idCliente, String nombre, String apellido, String usuario, String password, String nroFiscal, Date fechaNacimiento, int telefono, String mail, String domicilio, int altura, String localidad, String provincia, float promedio) {
         
         this.idCliente = idCliente;
         this.nombre = nombre;
@@ -68,7 +68,7 @@ public class Cliente {
         this.altura = altura;
         this.localidad = localidad;
         this.provincia = provincia;
-        this.calificacionPromedio = 0;
+        this.calificacionPromedio = promedio;
         
     }
     
@@ -82,11 +82,6 @@ public class Cliente {
         } else {
             return 0L;
         }
-    }
-    
-    public void guardar() throws ConexionException, AccesoException {
-        ClienteDAO clienteDao = new ClienteDAO();
-        clienteDao.grabarCliente(this);
     }
     
     public Long getIdCliente() {

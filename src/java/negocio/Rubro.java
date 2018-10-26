@@ -14,6 +14,11 @@ public class Rubro {
     private Long idRubro;
     private String descripcion;
 
+    public Rubro(Long idRubro, String descripcion) {
+        this.idRubro = idRubro;
+        this.descripcion = descripcion;
+    }
+
     public Long getIdRubro() {
         return idRubro;
     }

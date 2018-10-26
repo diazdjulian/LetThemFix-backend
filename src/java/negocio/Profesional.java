@@ -52,7 +52,7 @@ public class Profesional {
         
     }
     
-    public Profesional(Long idProfesional, String nombre, String apellido, String usuario, String password, String nroFiscal, Date fechaNacimiento, int telefono, String mail, String domicilio, int altura, String localidad, String provincia) {
+    public Profesional(Long idProfesional, String nombre, String apellido, String usuario, String password, String nroFiscal, Date fechaNacimiento, int telefono, String mail, String domicilio, int altura, String localidad, String provincia, float promedio) {
         
         this.idProfesional = idProfesional;
         this.nombre = nombre;
@@ -67,7 +67,7 @@ public class Profesional {
         this.altura = altura;
         this.localidad = localidad;
         this.provincia = provincia;
-        this.calificacionPromedio = 0;
+        this.calificacionPromedio = promedio;
         
     }
     
@@ -81,10 +81,6 @@ public class Profesional {
         } else {
             return 0L;
         }
-    }
-    
-    public void guardar() throws ConexionException, AccesoException {
-        ProfesionalDAO.grabarProfesional(this);
     }
     
     public Long getIdProfesional() {

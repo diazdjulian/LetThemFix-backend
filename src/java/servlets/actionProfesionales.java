@@ -49,7 +49,7 @@ public class actionProfesionales extends HttpServlet {
             Profesional p = params.fromJson(body, Profesional.class);
            
             try {
-                p.guardar();
+                ProfesionalDAO.grabarProfesional(p);
                 responseToConsumer = new Gson().toJson("{\"data\":\"Usuario guardado\"}");
                 response.setStatus(HttpServletResponse.SC_OK);
             } catch (ConexionException ex) {
@@ -62,10 +62,10 @@ public class actionProfesionales extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         } else if ("GET".equals(request.getMethod())) {
-            String dni = request.getParameter("dni");
+            String nroFiscal = request.getParameter("nroFiscal");
             Profesional p;
             try {
-                p = ProfesionalDAO.obtenerProfesionalPorDni(dni);
+                p = ProfesionalDAO.obtenerProfesionalPorNroFiscal(nroFiscal);
                 responseToConsumer = new Gson().toJson(p);
                 response.setStatus(HttpServletResponse.SC_OK);
             } catch (ConexionException ex) {

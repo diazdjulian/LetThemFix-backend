@@ -9,24 +9,26 @@ import excepciones.AccesoException;
 import excepciones.ConexionException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import negocio.Cliente;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dao.ClienteDAO;
+import dao.PresupuestoDAO;
+import dao.ProblemaDAO;
+import java.util.List;
+import negocio.Presupuesto;
+import negocio.Problema;
+import negocio.ProblemaUpdate;
 
 /**
  *
  * @author Sebas
  */
-public class actionClientes extends HttpServlet {
+public class actionPresupuestos extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,38 +46,56 @@ public class actionClientes extends HttpServlet {
         if ("POST".equals(request.getMethod())) {
             String body = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
             Gson params = new GsonBuilder().setDateFormat("DD/MM/YYYY").create();
-            Cliente c = params.fromJson(body, Cliente.class);
+            Presupuesto p = params.fromJson(body, Presupuesto.class);
            
             try {
-                ClienteDAO.grabarCliente(c);
-                responseToConsumer = new Gson().toJson("{\"data\":\"Usuario guardado\"}");
+                PresupuestoDAO.grabarPresupuesto(p);
+                responseToConsumer = new Gson().toJson("{\"data\":\"Presupuesto guardado\"}");
                 response.setStatus(HttpServletResponse.SC_OK);
             } catch (ConexionException ex) {
-                Logger.getLogger(actionClientes.class.getName()).log(Level.SEVERE, null, ex);
-                responseToConsumer = new Gson().toJson("{\"error\":\"Error al guardar usuario\"}");
+                Logger.getLogger(actionPresupuestos.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al guardar presupuesto\"}");
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             } catch (AccesoException ex) {
-                Logger.getLogger(actionClientes.class.getName()).log(Level.SEVERE, null, ex);
-                responseToConsumer = new Gson().toJson("{\"error\":\"Error al guardar usuario\"}");
+                Logger.getLogger(actionPresupuestos.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al guardar presupuesto\"}");
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         } else if ("GET".equals(request.getMethod())) {
-            String nroFiscal = request.getParameter("nroFiscal");
-            Cliente c;
+        
+            List<Presupuesto> p = null;
+            
             try {
-                c = ClienteDAO.obtenerClientePorNroFiscal(nroFiscal);
-                responseToConsumer = new Gson().toJson(c);
+                p = PresupuestoDAO.obtenerPresupuestosPorProblemaId(Long.parseLong(request.getParameter("problemaId")));
+                responseToConsumer = new Gson().toJson(p);
                 response.setStatus(HttpServletResponse.SC_OK);
             } catch (ConexionException ex) {
-                Logger.getLogger(actionClientes.class.getName()).log(Level.SEVERE, null, ex);
-                responseToConsumer = new Gson().toJson("{\"error\":\"Error al recuperar usuario\"}");
+                Logger.getLogger(actionProblemas.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al recuperar presupuestos\"}");
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             } catch (AccesoException ex) {
-                Logger.getLogger(actionClientes.class.getName()).log(Level.SEVERE, null, ex);
-                responseToConsumer = new Gson().toJson("{\"error\":\"Error al recuperar usuario\"}");
+                Logger.getLogger(actionProblemas.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al recuperar presupuestos\"}");
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
+        } else if ("PUT".equals(request.getMethod())) {
+            String body = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
+            Gson params = new GsonBuilder().setDateFormat("DD/MM/YYYY").create();
+            ProblemaUpdate p = params.fromJson(body, ProblemaUpdate.class);
             
+            try {
+                ProblemaDAO.actualizarProblema(p);
+                responseToConsumer = new Gson().toJson("Presupuesto aceptado");
+                response.setStatus(HttpServletResponse.SC_OK);
+            } catch (ConexionException ex) {
+                Logger.getLogger(actionProblemas.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al recuperar presupuestos\"}");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (AccesoException ex) {
+                Logger.getLogger(actionProblemas.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al recuperar presupuestos\"}");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
         } else {
             responseToConsumer = new Gson().toJson("{\"error\":\"Metodo no correcto\"}");
             response.setStatus(HttpServletResponse.SC_NOT_IMPLEMENTED);
@@ -118,6 +138,13 @@ public class actionClientes extends HttpServlet {
         setAccessControlHeaders(response);
         processRequest(request, response);
     }
+    
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        setAccessControlHeaders(response);
+        processRequest(request, response);
+    }
 
     /**
      * Returns a short description of the servlet.
@@ -140,6 +167,6 @@ public class actionClientes extends HttpServlet {
     private void setAccessControlHeaders(HttpServletResponse resp) {
         resp.setHeader("Access-Control-Allow-Origin", "*");
         resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, X-Requested-With");
-        resp.setHeader("Access-Control-Allow-Methods", "GET, POST");
+        resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT");
     }
 }

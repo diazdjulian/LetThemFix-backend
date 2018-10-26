@@ -16,16 +16,27 @@ public class Presupuesto {
     private float valor;
     private int cantJornadasLaborables;
     private float valorMateriales;
+    private Long idProblema;
 
-    public Presupuesto(Long idPresupuesto, String observacion, float valor, int cantidadJornadas, float materiales) {
+    public Presupuesto(Long idPresupuesto, String observacion, float valor, int cantidadJornadas, float materiales, Long idProblema) {
         this.idPresupuesto = idPresupuesto;
         this.observacion = observacion;
         this.valor = valor;
         this.cantJornadasLaborables = cantidadJornadas;
         this.valorMateriales = materiales;
-
+        this.idProblema = idProblema;
     }
 
+    public Presupuesto(String observacion, float valor, int cantJornadasLaborables, float valorMateriales, Long idProblema) {
+        this.observacion = observacion;
+        this.valor = valor;
+        this.cantJornadasLaborables = cantJornadasLaborables;
+        this.valorMateriales = valorMateriales;
+        this.idProblema = idProblema;
+    }
+
+    
+    
     public Long getIdPresupuesto() {
         return idPresupuesto;
     }
@@ -66,4 +77,13 @@ public class Presupuesto {
         this.valorMateriales = valorMateriales;
     }
 
+    public Long getIdProblema() {
+        return idProblema;
+    }
+
+    public void setIdProblema(Long idProblema) {
+        this.idProblema = idProblema;
+    }
+
+    
 }

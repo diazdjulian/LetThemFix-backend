@@ -21,7 +21,7 @@ import negocio.Profesional;
  */
 public class ProfesionalDAO {
     
-    static public Profesional obtenerProfesionalPorDni(String dni) throws ConexionException, AccesoException/*, ClienteException*/ {
+    static public Profesional obtenerProfesionalPorNroFiscal(String nroFiscal) throws ConexionException, AccesoException/*, ClienteException*/ {
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -38,16 +38,18 @@ public class ProfesionalDAO {
         } catch (SQLException e1) {
             throw new AccesoException("Error de acceso");
         }
-        String SQL = "SELECT  * FROM Profesionales where dni = " + dni;
+
+        String SQL = "SELECT  * FROM Profesionales where nroFiscal = '" + nroFiscal + "'";
+
         try {
             rs = stmt.executeQuery(SQL);
         } catch (SQLException e1) {
             throw new AccesoException("Error de consulta");
         }
-        try {
 
+        try {
             if (rs.next()) {
-                Profesional profesional = new Profesional(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getDate(7), rs.getInt(7), rs.getString(8), rs.getString(9), rs.getInt(10), rs.getString(11), rs.getString(12));
+                Profesional profesional = new Profesional(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getDate(7), rs.getInt(8), rs.getString(9), rs.getString(10), rs.getInt(11), rs.getString(12), rs.getString(13), rs.getFloat(14));
                 return profesional;
             } else {
                 return null;
@@ -57,6 +59,45 @@ public class ProfesionalDAO {
         }
     }
 
+    static public Profesional obtenerProfesionalPorId(int idProfesional) throws ConexionException, AccesoException/*, ClienteException*/ {
+        Connection con = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = ConnectionFactory.getInstancia().getConection();
+        } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(e.getMessage());
+            throw new ConexionException("No esta disponible el acceso al Servidor");
+        }
+
+        try {
+            stmt = con.createStatement();
+        } catch (SQLException e1) {
+            throw new AccesoException("Error de acceso");
+        }
+
+        String SQL = "SELECT  * FROM Profesionales where idProfesional = " + idProfesional;
+
+        try {
+            rs = stmt.executeQuery(SQL);
+        } catch (SQLException e1) {
+            throw new AccesoException("Error de consulta");
+        }
+
+        try {
+            if (rs.next()) {
+                Profesional profesional = new Profesional(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getDate(7), rs.getInt(8), rs.getString(9), rs.getString(10), rs.getInt(11), rs.getString(12), rs.getString(13), rs.getFloat(14));
+                return profesional;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new ConexionException("No es posible acceder a los datos");
+        }
+    }
+
+    
     static public void grabarProfesional(Profesional profesional) throws ConexionException, AccesoException {
         Connection con;
 
@@ -126,7 +167,7 @@ public class ProfesionalDAO {
         try {
 
             if (rs.next()) {
-                Profesional profesional = new Profesional(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getDate(7), rs.getInt(8), rs.getString(9), rs.getString(10), rs.getInt(11), rs.getString(12), rs.getString(13));
+                Profesional profesional = new Profesional(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getDate(7), rs.getInt(8), rs.getString(9), rs.getString(10), rs.getInt(11), rs.getString(12), rs.getString(13), rs.getFloat(14));
                 return profesional;
             } else {
                 return null;

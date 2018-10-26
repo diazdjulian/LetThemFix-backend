@@ -12,6 +12,14 @@
         <servlet-name>actionLogin</servlet-name>
         <servlet-class>servlets.actionLogin</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>actionProblemas</servlet-name>
+        <servlet-class>servlets.actionProblemas</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>actionPresupuestos</servlet-name>
+        <servlet-class>servlets.actionPresupuestos</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>actionLogin</servlet-name>
         <url-pattern>/actionLogin</url-pattern>
@@ -23,6 +31,14 @@
     <servlet-mapping>
         <servlet-name>actionProfesionales</servlet-name>
         <url-pattern>/actionProfesionales</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>actionProblemas</servlet-name>
+        <url-pattern>/actionProblemas</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>actionPresupuestos</servlet-name>
+        <url-pattern>/actionPresupuestos</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

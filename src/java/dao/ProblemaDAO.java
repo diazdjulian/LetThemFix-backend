@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import negocio.Cliente;
 import negocio.Presupuesto;
 import negocio.Problema;
@@ -264,29 +266,30 @@ public class ProblemaDAO {
     }
 
     static public void eliminarProblema(int idProblema) throws ConexionException, AccesoException/*, ClienteException*/ {
-        Connection con = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-
         try {
-            con = ConnectionFactory.getInstancia().getConection();
-        } catch (ClassNotFoundException | SQLException e) {
-            System.out.println(e.getMessage());
-            throw new ConexionException("No esta disponible el acceso al Servidor");
-        }
-
-        try {
-            stmt = con.createStatement();
-        } catch (SQLException e1) {
-            throw new AccesoException("Error de acceso");
-        }
-
-        String SQL = "DELETE FROM Problemas where idProblema = " + idProblema;
-
-        try {
-            stmt.executeQuery(SQL);
-        } catch (SQLException e1) {
-            throw new AccesoException("Error de consulta");
+            Connection con = null;
+            PreparedStatement stm;
+            ResultSet rs = null;
+            
+            try {
+                con = ConnectionFactory.getInstancia().getConection();
+            } catch (ClassNotFoundException | SQLException e) {
+                System.out.println(e.getMessage());
+                throw new ConexionException("No esta disponible el acceso al Servidor");
+            }
+           
+            
+            stm = con.prepareStatement("DELETE FROM Problemas where idProblema = ?");
+            stm.setInt(1, idProblema);
+            
+            try {
+                stm.execute();
+            } catch (SQLException e1) {
+                throw new AccesoException("Error de acceso");
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ProblemaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

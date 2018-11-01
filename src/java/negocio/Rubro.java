@@ -10,7 +10,7 @@ package negocio;
  * @author Sebas
  */
 public class Rubro {
-    
+
     private Long idRubro;
     private String descripcion;
 
@@ -34,7 +34,5 @@ public class Rubro {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    
-    
-    
+
 }

@@ -23,6 +23,8 @@ import java.util.List;
 import negocio.Presupuesto;
 import negocio.Problema;
 import negocio.ProblemaUpdate;
+import service.Servicios;
+import serviceImpl.ServiciosImpl;
 
 /**
  *
@@ -42,12 +44,13 @@ public class actionPresupuestos extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String responseToConsumer = "";
+        ServiciosImpl serv = new ServiciosImpl();
 
         if ("POST".equals(request.getMethod())) {
             String body = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
             Gson params = new GsonBuilder().setDateFormat("DD/MM/YYYY").create();
             Presupuesto p = params.fromJson(body, Presupuesto.class);
-           
+
             try {
                 PresupuestoDAO.grabarPresupuesto(p);
                 responseToConsumer = new Gson().toJson("{\"data\":\"Presupuesto guardado\"}");
@@ -62,9 +65,9 @@ public class actionPresupuestos extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         } else if ("GET".equals(request.getMethod())) {
-        
+
             List<Presupuesto> p = null;
-            
+
             try {
                 p = PresupuestoDAO.obtenerPresupuestosPorProblemaId(Long.parseLong(request.getParameter("problemaId")));
                 responseToConsumer = new Gson().toJson(p);
@@ -82,20 +85,15 @@ public class actionPresupuestos extends HttpServlet {
             String body = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
             Gson params = new GsonBuilder().setDateFormat("DD/MM/YYYY").create();
             ProblemaUpdate p = params.fromJson(body, ProblemaUpdate.class);
+
+            String idPresupuesto = request.getParameter("idPresupuesto");
+            String idProblema = request.getParameter("idProblema");
+            ServiciosImpl servicio = new ServiciosImpl();
+            servicio.aceptarPresupuesto(Long.parseLong(idProblema), Long.parseLong(idPresupuesto));
             
-            try {
-                ProblemaDAO.actualizarProblema(p);
-                responseToConsumer = new Gson().toJson("Presupuesto aceptado");
-                response.setStatus(HttpServletResponse.SC_OK);
-            } catch (ConexionException ex) {
-                Logger.getLogger(actionProblemas.class.getName()).log(Level.SEVERE, null, ex);
-                responseToConsumer = new Gson().toJson("{\"error\":\"Error al recuperar presupuestos\"}");
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            } catch (AccesoException ex) {
-                Logger.getLogger(actionProblemas.class.getName()).log(Level.SEVERE, null, ex);
-                responseToConsumer = new Gson().toJson("{\"error\":\"Error al recuperar presupuestos\"}");
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            }
+            responseToConsumer = new Gson().toJson("Presupuesto aceptado");
+            response.setStatus(HttpServletResponse.SC_OK);
+            
         } else {
             responseToConsumer = new Gson().toJson("{\"error\":\"Metodo no correcto\"}");
             response.setStatus(HttpServletResponse.SC_NOT_IMPLEMENTED);
@@ -138,7 +136,7 @@ public class actionPresupuestos extends HttpServlet {
         setAccessControlHeaders(response);
         processRequest(request, response);
     }
-    
+
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -160,10 +158,10 @@ public class actionPresupuestos extends HttpServlet {
     @Override
     protected void doOptions(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-            setAccessControlHeaders(resp);
+        setAccessControlHeaders(resp);
         resp.setStatus(HttpServletResponse.SC_OK);
     }
-    
+
     private void setAccessControlHeaders(HttpServletResponse resp) {
         resp.setHeader("Access-Control-Allow-Origin", "*");
         resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, X-Requested-With");

@@ -49,7 +49,7 @@ public class actionProblemas extends HttpServlet {
         if ("POST".equals(request.getMethod())) {
             String body = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
             Gson params = new GsonBuilder().setDateFormat("DD/MM/YYYY").create();
-            ProblemaRequest p = params.fromJson(body, ProblemaRequest.class);
+            Problema p = params.fromJson(body, Problema.class);
            
             try {
                 ProblemaDAO.grabarProblema(p);

@@ -54,9 +54,7 @@ public class TrabajoDAO {
         try {
 
             if (rs.next()) {
-                Problema trabajoProblema = ProblemaDAO.obtenerProblemaPorId(rs.getInt(2));
-                Profesional profesionalProblema = ProfesionalDAO.obtenerProfesionalPorId(rs.getInt(3));
-                Trabajo trabajo = new Trabajo(rs.getLong(1), trabajoProblema, profesionalProblema, rs.getDate(4), rs.getDate(5), rs.getDate(6), rs.getString(7), rs.getString(8));
+                Trabajo trabajo = new Trabajo(rs.getLong(1), rs.getDate(4), rs.getDate(5), rs.getDate(6), rs.getString(7), rs.getString(8));
                 return trabajo;
             } else {
                 return null;
@@ -66,12 +64,12 @@ public class TrabajoDAO {
         }
     }
 
-        static public List<Trabajo> obtenerTrabajosPorProfesional(int idProfesional) throws ConexionException, AccesoException/*, ClienteException*/ {
+    static public List<Trabajo> obtenerTrabajosPorProfesional(int idProfesional) throws ConexionException, AccesoException/*, ClienteException*/ {
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
         List<Trabajo> profesionalTrabajos = new LinkedList<Trabajo>();
-        
+
         try {
             con = ConnectionFactory.getInstancia().getConection();
         } catch (ClassNotFoundException | SQLException e) {
@@ -95,18 +93,18 @@ public class TrabajoDAO {
 
         try {
             if (rs.next()) {
-                Problema trabajoProblema = ProblemaDAO.obtenerProblemaPorId(rs.getInt(2));
-                Profesional profesionalProblema = ProfesionalDAO.obtenerProfesionalPorId(rs.getInt(3));
-                Trabajo trabajo = new Trabajo(rs.getLong(1), trabajoProblema, profesionalProblema, rs.getDate(4), rs.getDate(5), rs.getDate(6), rs.getString(7), rs.getString(8));
+//                Problema trabajoProblema = ProblemaDAO.obtenerProblemaPorId(rs.getInt(2));
+//                Profesional profesionalProblema = ProfesionalDAO.obtenerProfesionalPorId(rs.getInt(3));
+                Trabajo trabajo = new Trabajo(rs.getLong(1), rs.getDate(4), rs.getDate(5), rs.getDate(6), rs.getString(7), rs.getString(8));
                 profesionalTrabajos.add(trabajo);
-                
-                while(rs.next()) {
-                    trabajoProblema = ProblemaDAO.obtenerProblemaPorId(rs.getInt(2));
-                    profesionalProblema = ProfesionalDAO.obtenerProfesionalPorId(rs.getInt(3));
-                    trabajo = new Trabajo(rs.getLong(1), trabajoProblema, profesionalProblema, rs.getDate(4), rs.getDate(5), rs.getDate(6), rs.getString(7), rs.getString(8));
+
+                while (rs.next()) {
+//                    trabajoProblema = ProblemaDAO.obtenerProblemaPorId(rs.getInt(2));
+//                    profesionalProblema = ProfesionalDAO.obtenerProfesionalPorId(rs.getInt(3));
+                    trabajo = new Trabajo(rs.getLong(1), rs.getDate(4), rs.getDate(5), rs.getDate(6), rs.getString(7), rs.getString(8));
                     profesionalTrabajos.add(trabajo);
                 }
-                
+
                 return profesionalTrabajos;
             } else {
                 return null;
@@ -115,8 +113,8 @@ public class TrabajoDAO {
             throw new ConexionException("No es posible acceder a los datos");
         }
     }
-    
-    static public void grabarTrabajo(Trabajo trabajo) throws ConexionException, AccesoException {
+
+    static public Long grabarTrabajo(Trabajo trabajo) throws ConexionException, AccesoException {
         Connection con;
 
         try {
@@ -128,13 +126,12 @@ public class TrabajoDAO {
 
         PreparedStatement stm;
         try {
-            stm = con.prepareStatement("insert into Trabajos values(?,?,?,?,?)");
+            stm = con.prepareStatement("insert into Trabajos values(?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
             stm.setDate(1, new java.sql.Date(trabajo.getFechaAceptacion().getTime()));
             stm.setDate(2, new java.sql.Date(trabajo.getFechaInicio().getTime()));
             stm.setDate(3, new java.sql.Date(trabajo.getFechaFin().getTime()));
             stm.setString(4, trabajo.getObservaciones());
             stm.setString(5, trabajo.getEstado());
-
 
         } catch (SQLException e) {
             throw new AccesoException("Error de acceso");
@@ -142,6 +139,14 @@ public class TrabajoDAO {
 
         try {
             stm.execute();
+
+            ResultSet rs = stm.getGeneratedKeys();
+            if (rs != null && rs.next()) {
+                long llave = rs.getLong(1);
+                return llave;
+            } else {
+                return null;
+            }
         } catch (SQLException e) {
             throw new AccesoException("No se pudo guardar");
         }

@@ -14,18 +14,14 @@ import java.util.Date;
 public class Trabajo {
 
     private Long idTrabajo;
-    private Problema problema;
-    private Profesional profesional;
     private Date fechaAceptacion;
     private Date fechaInicio;
     private Date fechaFin;
     private String observaciones;
     private String estado;
 
-    public Trabajo(Long idTrabajo, Problema problema, Profesional profesional, Date fechaAceptacion, Date fechaInicio, Date fechaFin, String observaciones, String estado) {
+    public Trabajo(Long idTrabajo, Date fechaAceptacion, Date fechaInicio, Date fechaFin, String observaciones, String estado) {
         this.idTrabajo = idTrabajo;
-        this.problema = problema;
-        this.profesional = profesional;
         this.fechaAceptacion = fechaAceptacion;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
@@ -33,9 +29,7 @@ public class Trabajo {
         this.estado = estado;
     }
 
-    public Trabajo(Problema problema, Profesional profesional, Date fechaAceptacion, Date fechaInicio, Date fechaFin, String observaciones, String estado) {
-        this.problema = problema;
-        this.profesional = profesional;
+    public Trabajo(Date fechaAceptacion, Date fechaInicio, Date fechaFin, String observaciones, String estado) {
         this.fechaAceptacion = fechaAceptacion;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
@@ -45,14 +39,6 @@ public class Trabajo {
 
     public Long getIdTrabajo() {
         return idTrabajo;
-    }
-
-    public Problema getProblema() {
-        return problema;
-    }
-
-    public Profesional getProfesional() {
-        return profesional;
     }
 
     public Date getFechaAceptacion() {
@@ -79,14 +65,6 @@ public class Trabajo {
         this.idTrabajo = idTrabajo;
     }
 
-    public void setProblema(Problema problema) {
-        this.problema = problema;
-    }
-
-    public void setProfesional(Profesional profesional) {
-        this.profesional = profesional;
-    }
-
     public void setFechaAceptacion(Date fechaAceptacion) {
         this.fechaAceptacion = fechaAceptacion;
     }
@@ -107,5 +85,4 @@ public class Trabajo {
         this.estado = estado;
     }
 
-    
 }

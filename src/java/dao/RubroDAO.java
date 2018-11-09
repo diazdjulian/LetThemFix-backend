@@ -8,6 +8,7 @@ package dao;
 import excepciones.AccesoException;
 import excepciones.ConexionException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -21,7 +22,7 @@ import negocio.Rubro;
  * @author Sebas
  */
 public class RubroDAO {
-    
+
     static public Rubro obtenerRubroPorId(int rubroId) throws ConexionException, AccesoException/*, ClienteException*/ {
         Connection con = null;
         Statement stmt = null;
@@ -59,7 +60,7 @@ public class RubroDAO {
             throw new ConexionException("No es posible acceder a los datos");
         }
     }
-    
+
     static public List<Rubro> obtenerRubros() throws ConexionException, AccesoException/*, ClienteException*/ {
         Connection con = null;
         Statement stmt = null;
@@ -98,6 +99,33 @@ public class RubroDAO {
             }
         } catch (SQLException e) {
             throw new ConexionException("No es posible acceder a los datos");
+        }
+    }
+
+    static public void grabarRubro(Rubro rubro) throws ConexionException, AccesoException {
+        Connection con;
+
+        try {
+            con = ConnectionFactory.getInstancia().getConection();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            throw new ConexionException("No esta disponible el acceso al Servidor");
+        }
+
+        PreparedStatement stm;
+        try {
+            stm = con.prepareStatement("insert into Rubros values(?)");
+            stm.setString(1, rubro.getDescripcion());
+
+        } catch (SQLException e) {
+            throw new AccesoException("Error de acceso");
+        }
+
+        try {
+            stm.execute();
+
+        } catch (SQLException e) {
+            throw new AccesoException("No se pudo guardar");
         }
     }
 }

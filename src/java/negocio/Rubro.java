@@ -18,7 +18,11 @@ public class Rubro {
         this.idRubro = idRubro;
         this.descripcion = descripcion;
     }
-
+    
+    public Rubro(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    
     public Long getIdRubro() {
         return idRubro;
     }

@@ -23,7 +23,7 @@ public class ClienteDAO {
             con = ConnectionFactory.getInstancia().getConection();
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println(e.getMessage());
-            throw new ConexionException("No esta disponible el acceso al Servidor");
+            throw new ConexionException("No esta disponible el acceso al Servidor.");
         }
 
         try {

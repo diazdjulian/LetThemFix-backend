@@ -18,7 +18,7 @@ public class Valoracion {
     private Long idValorador;
     private Long idValorado;
 
-    public Valoracion(Long idValoracion, String tipoValorado, float calificacion, String detalle, Long idValorador, Long idValorado) {
+    public Valoracion(Long idValoracion, Long idValorado, Long idValorador,  String tipoValorado, String detalle, float calificacion) {
         this.idValoracion = idValoracion;
         this.tipoValorado = tipoValorado;
         this.calificacion = calificacion;
@@ -27,7 +27,7 @@ public class Valoracion {
         this.idValorado = idValorado;
     }
 
-    public Valoracion(String tipoValorado, float calificacion, String detalle, Long idValorador, Long idValorado) {
+    public Valoracion(Long idValorado, Long idValorador,  String tipoValorado, String detalle, float calificacion) {
         this.tipoValorado = tipoValorado;
         this.calificacion = calificacion;
         this.detalle = detalle;

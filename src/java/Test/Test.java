@@ -4,6 +4,7 @@ import dao.ClienteDAO;
 import dao.ProblemaDAO;
 import dao.ProfesionalDAO;
 import dao.RubroDAO;
+import dao.ValoracionDAO;
 import excepciones.AccesoException;
 import excepciones.ConexionException;
 import java.text.ParseException;
@@ -16,6 +17,7 @@ import negocio.Problema;
 import negocio.Profesional;
 import negocio.Rubro;
 import negocio.Trabajo;
+import negocio.Valoracion;
 
 public class Test {
 
@@ -50,7 +52,14 @@ public class Test {
 //        prof.setApellido("Carnicero");
         
 //        ProfesionalDAO.bajaProfesional(1L);
-        ClienteDAO.bajaCliente(2L);
+//        ClienteDAO.bajaCliente(2L);
+
+
+//          Valoracion val = new Valoracion (1L, 1L,  "Profesional", "El Profesional es un capo", 9.5f);
+//          ValoracionDAO.grabarValoracion(val);
+          
+//          Valoracion val = ValoracionDAO.obtenerValoracionPorId(1L);
+
         String hola = "HOLA";
 
     }

@@ -17,20 +17,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dao.PresupuestoDAO;
-import dao.ProblemaDAO;
+import dao.ValoracionDAO;
 import java.util.List;
-import negocio.Presupuesto;
-import negocio.Problema;
-import negocio.ProblemaUpdate;
-import service.Servicios;
-import serviceImpl.ServiciosImpl;
+import negocio.Valoracion;
 
 /**
  *
  * @author Sebas
  */
-public class actionPresupuestos extends HttpServlet {
+public class actionValoraciones extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,56 +39,61 @@ public class actionPresupuestos extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String responseToConsumer = "";
-        ServiciosImpl serv = new ServiciosImpl();
 
         if ("POST".equals(request.getMethod())) {
             String body = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
             Gson params = new GsonBuilder().setDateFormat("DD/MM/YYYY").create();
-            Presupuesto p = params.fromJson(body, Presupuesto.class);
+            Valoracion val = params.fromJson(body, Valoracion.class);
 
             try {
-                PresupuestoDAO.grabarPresupuesto(p);
-                responseToConsumer = new Gson().toJson("{\"data\":\"Presupuesto guardado\"}");
+                ValoracionDAO.grabarValoracion(val);
+                responseToConsumer = new Gson().toJson("{\"data\":\"Se ha guardado la valoracion\"}");
                 response.setStatus(HttpServletResponse.SC_OK);
             } catch (ConexionException ex) {
-                Logger.getLogger(actionPresupuestos.class.getName()).log(Level.SEVERE, null, ex);
-                responseToConsumer = new Gson().toJson("{\"error\":\"Error al guardar presupuesto\"}");
+                Logger.getLogger(actionClientes.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al guardar valoracion\"}");
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             } catch (AccesoException ex) {
-                Logger.getLogger(actionPresupuestos.class.getName()).log(Level.SEVERE, null, ex);
-                responseToConsumer = new Gson().toJson("{\"error\":\"Error al guardar presupuesto\"}");
+                Logger.getLogger(actionClientes.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al guardar valoracion\"}");
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
+            
+        
+        } else if ("GET".equals(request.getMethod()) && request.getParameter("idValorado") != null) {
+            List<Valoracion> listaValoraciones;
+            try {
+                listaValoraciones = ValoracionDAO.obtenerValoraciones(Long.valueOf(request.getParameter("idValorado")));
+                responseToConsumer = new Gson().toJson(listaValoraciones);
+                response.setStatus(HttpServletResponse.SC_OK);
+            } catch (ConexionException ex) {
+                Logger.getLogger(actionClientes.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al recuperar las valoraciones\"}");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (AccesoException ex) {
+                Logger.getLogger(actionClientes.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al recuperar las valoraciones\"}");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+            
+            
         } else if ("GET".equals(request.getMethod())) {
-
-            List<Presupuesto> p = null;
-
+ 
+            Valoracion val;
             try {
-                p = PresupuestoDAO.obtenerPresupuestosPorProblemaId(Long.parseLong(request.getParameter("problemaId")));
-                responseToConsumer = new Gson().toJson(p);
+                val = ValoracionDAO.obtenerValoracionPorId(Long.valueOf(request.getParameter("idValoracion")));
+                responseToConsumer = new Gson().toJson(val);
                 response.setStatus(HttpServletResponse.SC_OK);
             } catch (ConexionException ex) {
-                Logger.getLogger(actionPresupuestos.class.getName()).log(Level.SEVERE, null, ex);
-                responseToConsumer = new Gson().toJson("{\"error\":\"Error al recuperar presupuestos\"}");
+                Logger.getLogger(actionClientes.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al recuperar la valoracion\"}");
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             } catch (AccesoException ex) {
-                Logger.getLogger(actionPresupuestos.class.getName()).log(Level.SEVERE, null, ex);
-                responseToConsumer = new Gson().toJson("{\"error\":\"Error al recuperar presupuestos\"}");
+                Logger.getLogger(actionClientes.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al recuperar la valoracion\"}");
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
-        } else if ("PUT".equals(request.getMethod())) {
-            String body = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
-            Gson params = new GsonBuilder().setDateFormat("DD/MM/YYYY").create();
-            ProblemaUpdate p = params.fromJson(body, ProblemaUpdate.class);
 
-            String idPresupuesto = request.getParameter("idPresupuesto");
-            String idProblema = request.getParameter("idProblema");
-            ServiciosImpl servicio = new ServiciosImpl();
-            servicio.aceptarPresupuesto(Long.parseLong(idProblema), Long.parseLong(idPresupuesto));
-            
-            responseToConsumer = new Gson().toJson("Presupuesto aceptado");
-            response.setStatus(HttpServletResponse.SC_OK);
-            
         } else {
             responseToConsumer = new Gson().toJson("{\"error\":\"Metodo no correcto\"}");
             response.setStatus(HttpServletResponse.SC_NOT_IMPLEMENTED);
@@ -137,13 +137,6 @@ public class actionPresupuestos extends HttpServlet {
         processRequest(request, response);
     }
 
-    @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        setAccessControlHeaders(response);
-        processRequest(request, response);
-    }
-
     /**
      * Returns a short description of the servlet.
      *
@@ -165,6 +158,6 @@ public class actionPresupuestos extends HttpServlet {
     private void setAccessControlHeaders(HttpServletResponse resp) {
         resp.setHeader("Access-Control-Allow-Origin", "*");
         resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, X-Requested-With");
-        resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT");
+        resp.setHeader("Access-Control-Allow-Methods", "GET, POST");
     }
 }

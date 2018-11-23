@@ -9,18 +9,14 @@ import excepciones.AccesoException;
 import excepciones.ConexionException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import negocio.Cliente;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dao.ClienteDAO;
 import dao.ProfesionalDAO;
 import negocio.Profesional;
 
@@ -47,7 +43,7 @@ public class actionProfesionales extends HttpServlet {
             String body = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
             Gson params = new GsonBuilder().setDateFormat("DD/MM/YYYY").create();
             Profesional p = params.fromJson(body, Profesional.class);
-           
+
             try {
                 ProfesionalDAO.grabarProfesional(p);
                 responseToConsumer = new Gson().toJson("{\"data\":\"Usuario guardado\"}");
@@ -61,6 +57,46 @@ public class actionProfesionales extends HttpServlet {
                 responseToConsumer = new Gson().toJson("{\"error\":\"Error al guardar profesional\"}");
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
+
+        } else if ("GET".equals(request.getMethod()) && request.getParameter("idProfesionalEliminar") != null) {
+
+//            String body = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
+//            Gson params = new GsonBuilder().setDateFormat("DD/MM/YYYY").create();
+//            Profesional p = params.fromJson(body, Profesional.class);
+            try {
+                ProfesionalDAO.bajaProfesional(Long.valueOf(request.getParameter("idProfesionalEliminar")));
+                responseToConsumer = new Gson().toJson("{\"data\":\"Profesional dado de baja\"}");
+                response.setStatus(HttpServletResponse.SC_OK);
+            } catch (ConexionException ex) {
+                Logger.getLogger(actionProfesionales.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al guardar profesional\"}");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (AccesoException ex) {
+                Logger.getLogger(actionProfesionales.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al guardar profesional\"}");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+
+        } else if ("GET".equals(request.getMethod()) && request.getParameter("idProfesionalModificar") != null) {
+            
+            String body = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
+            Gson params = new GsonBuilder().setDateFormat("DD/MM/YYYY").create();
+            Profesional p = params.fromJson(body, Profesional.class);
+
+            try {
+                ProfesionalDAO.actualizarProfesional(p, Long.valueOf(request.getParameter("idProfesionalEliminar")));
+                responseToConsumer = new Gson().toJson("{\"data\":\"Profesional actualizado\"}");
+                response.setStatus(HttpServletResponse.SC_OK);
+            } catch (ConexionException ex) {
+                Logger.getLogger(actionProfesionales.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al guardar profesional\"}");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (AccesoException ex) {
+                Logger.getLogger(actionProfesionales.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al guardar profesional\"}");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+
         } else if ("GET".equals(request.getMethod())) {
             String nroFiscal = request.getParameter("nroFiscal");
             Profesional p;
@@ -77,7 +113,7 @@ public class actionProfesionales extends HttpServlet {
                 responseToConsumer = new Gson().toJson("{\"error\":\"Error al recuperar profesional\"}");
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
-            
+
         } else {
             responseToConsumer = new Gson().toJson("{\"error\":\"Metodo no correcto\"}");
             response.setStatus(HttpServletResponse.SC_NOT_IMPLEMENTED);
@@ -135,10 +171,10 @@ public class actionProfesionales extends HttpServlet {
     @Override
     protected void doOptions(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-            setAccessControlHeaders(resp);
+        setAccessControlHeaders(resp);
         resp.setStatus(HttpServletResponse.SC_OK);
     }
-    
+
     private void setAccessControlHeaders(HttpServletResponse resp) {
         resp.setHeader("Access-Control-Allow-Origin", "*");
         resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, X-Requested-With");

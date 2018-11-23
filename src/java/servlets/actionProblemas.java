@@ -9,23 +9,18 @@ import excepciones.AccesoException;
 import excepciones.ConexionException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import negocio.Cliente;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dao.ClienteDAO;
 import dao.ProblemaDAO;
 import java.util.LinkedList;
 import java.util.List;
 import negocio.Problema;
-import negocio.ProblemaRequest;
 
 /**
  *

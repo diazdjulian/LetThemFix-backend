@@ -45,7 +45,7 @@ public class actionClientes extends HttpServlet {
             String body = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
             Gson params = new GsonBuilder().setDateFormat("DD/MM/YYYY").create();
             Cliente c = params.fromJson(body, Cliente.class);
-           
+
             try {
                 ClienteDAO.grabarCliente(c);
                 responseToConsumer = new Gson().toJson("{\"data\":\"Usuario guardado\"}");
@@ -59,6 +59,45 @@ public class actionClientes extends HttpServlet {
                 responseToConsumer = new Gson().toJson("{\"error\":\"Error al guardar usuario\"}");
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
+        } else if ("GET".equals(request.getMethod()) && request.getParameter("idClienteEliminar") != null) {
+            
+//            String body = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
+//            Gson params = new GsonBuilder().setDateFormat("DD/MM/YYYY").create();
+//            Cliente c = params.fromJson(body, Cliente.class);
+
+            try {
+                ClienteDAO.bajaCliente(Long.valueOf(request.getParameter("idClienteEliminar")));
+                responseToConsumer = new Gson().toJson("{\"data\":\"Cliente dado de baja\"}");
+                response.setStatus(HttpServletResponse.SC_OK);
+            } catch (ConexionException ex) {
+                Logger.getLogger(actionClientes.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al guardar\"}");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (AccesoException ex) {
+                Logger.getLogger(actionClientes.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al guardar\"}");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+        }else if ("GET".equals(request.getMethod()) && request.getParameter("idClienteModificar") != null) {
+            
+            String body = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
+            Gson params = new GsonBuilder().setDateFormat("DD/MM/YYYY").create();
+            Cliente c = params.fromJson(body, Cliente.class);
+
+            try {
+                ClienteDAO.actualizarCliente(c, Long.valueOf(request.getParameter("idClienteEliminar")));
+                responseToConsumer = new Gson().toJson("{\"data\":\"Cliente actualizado\"}");
+                response.setStatus(HttpServletResponse.SC_OK);
+            } catch (ConexionException ex) {
+                Logger.getLogger(actionClientes.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al guardar\"}");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (AccesoException ex) {
+                Logger.getLogger(actionClientes.class.getName()).log(Level.SEVERE, null, ex);
+                responseToConsumer = new Gson().toJson("{\"error\":\"Error al guardar\"}");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+            
         } else if ("GET".equals(request.getMethod())) {
             String nroFiscal = request.getParameter("nroFiscal");
             Cliente c;
@@ -75,7 +114,7 @@ public class actionClientes extends HttpServlet {
                 responseToConsumer = new Gson().toJson("{\"error\":\"Error al recuperar usuario\"}");
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
-            
+
         } else {
             responseToConsumer = new Gson().toJson("{\"error\":\"Metodo no correcto\"}");
             response.setStatus(HttpServletResponse.SC_NOT_IMPLEMENTED);
@@ -133,10 +172,10 @@ public class actionClientes extends HttpServlet {
     @Override
     protected void doOptions(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-            setAccessControlHeaders(resp);
+        setAccessControlHeaders(resp);
         resp.setStatus(HttpServletResponse.SC_OK);
     }
-    
+
     private void setAccessControlHeaders(HttpServletResponse resp) {
         resp.setHeader("Access-Control-Allow-Origin", "*");
         resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, X-Requested-With");

@@ -5,10 +5,6 @@
  */
 package negocio;
 
-import dao.ProfesionalDAO;
-import excepciones.AccesoException;
-import excepciones.ConexionException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +29,7 @@ public class Profesional {
     private String provincia;
     private float calificacionPromedio;
     private List<Valoracion> valoraciones;
+    private String estado;
 
     public Profesional(String nombre, String apellido, String usuario, String password, String nroFiscal, Date fechaNacimiento, int telefono, String mail, String domicilio, int altura, String localidad, String provincia) {
        
@@ -52,7 +49,7 @@ public class Profesional {
         
     }
     
-    public Profesional(Long idProfesional, String nombre, String apellido, String usuario, String password, String nroFiscal, Date fechaNacimiento, int telefono, String mail, String domicilio, int altura, String localidad, String provincia, float promedio) {
+    public Profesional(Long idProfesional, String nombre, String apellido, String usuario, String password, String nroFiscal, Date fechaNacimiento, int telefono, String mail, String domicilio, int altura, String localidad, String provincia, float promedio, String estado) {
         
         this.idProfesional = idProfesional;
         this.nombre = nombre;
@@ -68,6 +65,7 @@ public class Profesional {
         this.localidad = localidad;
         this.provincia = provincia;
         this.calificacionPromedio = promedio;
+        this.estado = estado;
         
     }
     
@@ -203,4 +201,13 @@ public class Profesional {
         this.provincia = provincia;
     }
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    
+    
 }

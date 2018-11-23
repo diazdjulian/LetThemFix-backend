@@ -34,6 +34,7 @@ public class Cliente {
     private String provincia;
     private float calificacionPromedio;
     private List<Valoracion> valoraciones;
+    private String estado;
     
     public Cliente(String nombre, String apellido, String usuario, String password, String nroFiscal, Date fechaNacimiento, int telefono, String mail, String domicilio, int altura, String localidad, String provincia) {
        
@@ -53,7 +54,7 @@ public class Cliente {
         
     }
     
-    public Cliente(Long idCliente, String nombre, String apellido, String usuario, String password, String nroFiscal, Date fechaNacimiento, int telefono, String mail, String domicilio, int altura, String localidad, String provincia, float promedio) {
+    public Cliente(Long idCliente, String nombre, String apellido, String usuario, String password, String nroFiscal, Date fechaNacimiento, int telefono, String mail, String domicilio, int altura, String localidad, String provincia, float promedio, String estado) {
         
         this.idCliente = idCliente;
         this.nombre = nombre;
@@ -69,6 +70,7 @@ public class Cliente {
         this.localidad = localidad;
         this.provincia = provincia;
         this.calificacionPromedio = promedio;
+        this.estado = estado;
         
     }
     
@@ -204,5 +206,14 @@ public class Cliente {
         this.provincia = provincia;
     }
 
+    public String getEstado() {
+        return estado;
+    }
 
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    
+    
 }

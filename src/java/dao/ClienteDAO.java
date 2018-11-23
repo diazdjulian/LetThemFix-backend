@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import negocio.Cliente;
 
 public class ClienteDAO {
+
     static public Cliente obtenerClientePorId(Long clienteId) throws ConexionException, AccesoException/*, ClienteException*/ {
         Connection con = null;
         Statement stmt = null;
@@ -32,7 +33,7 @@ public class ClienteDAO {
             throw new AccesoException("Error de acceso");
         }
 
-        String SQL = "SELECT  * FROM Clientes where idCliente = " + clienteId;
+        String SQL = "SELECT  * FROM Clientes where idCliente = " + clienteId + " and estado = 'A' ";
 
         try {
             rs = stmt.executeQuery(SQL);
@@ -42,7 +43,7 @@ public class ClienteDAO {
 
         try {
             if (rs.next()) {
-                Cliente cliente = new Cliente(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getDate(7), rs.getInt(8), rs.getString(9), rs.getString(10), rs.getInt(11), rs.getString(12), rs.getString(13), rs.getFloat(14));
+                Cliente cliente = new Cliente(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getDate(7), rs.getInt(8), rs.getString(9), rs.getString(10), rs.getInt(11), rs.getString(12), rs.getString(13), rs.getFloat(14), rs.getString(15));
                 return cliente;
             } else {
                 return null;
@@ -51,7 +52,7 @@ public class ClienteDAO {
             throw new ConexionException("No es posible acceder a los datos");
         }
     }
-    
+
     static public Cliente obtenerClientePorNroFiscal(String nroFiscal) throws ConexionException, AccesoException/*, ClienteException*/ {
         Connection con = null;
         Statement stmt = null;
@@ -80,7 +81,7 @@ public class ClienteDAO {
 
         try {
             if (rs.next()) {
-                Cliente cliente = new Cliente(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getDate(7), rs.getInt(8), rs.getString(9), rs.getString(10), rs.getInt(11), rs.getString(12), rs.getString(13), rs.getFloat(14));
+                Cliente cliente = new Cliente(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getDate(7), rs.getInt(8), rs.getString(9), rs.getString(10), rs.getInt(11), rs.getString(12), rs.getString(13), rs.getFloat(14), rs.getString(15));
                 return cliente;
             } else {
                 return null;
@@ -102,7 +103,7 @@ public class ClienteDAO {
 
         PreparedStatement stm;
         try {
-            stm = con.prepareStatement("insert into Clientes values(?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            stm = con.prepareStatement("insert into Clientes values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             stm.setString(1, c.getNombre());
             stm.setString(2, c.getApellido());
             stm.setString(3, c.getUsuario());
@@ -116,6 +117,7 @@ public class ClienteDAO {
             stm.setString(11, c.getLocalidad());
             stm.setString(12, c.getProvincia());
             stm.setFloat(13, 0.0F);
+            stm.setString(14, "A");
 
         } catch (SQLException e) {
             throw new AccesoException("Error de acceso");
@@ -128,13 +130,13 @@ public class ClienteDAO {
             throw new AccesoException("No se pudo guardar");
         }
     }
-    
+
     static public Cliente login(String userMail, String password) throws ConexionException, AccesoException/*, ClienteException*/ {
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
         String SQL = "";
-        
+
         try {
             con = ConnectionFactory.getInstancia().getConection();
         } catch (ClassNotFoundException | SQLException e) {
@@ -148,9 +150,9 @@ public class ClienteDAO {
             throw new AccesoException("Error de acceso");
         }
         if (userMail.contains("@")) {
-            SQL = "SELECT * FROM Clientes where mail = '" + userMail + "' and password = '" + password + "'";
+            SQL = "SELECT * FROM Clientes where mail = '" + userMail + "' and password = '" + password + "' and estado = 'A'";
         } else {
-            SQL = "SELECT * FROM Clientes where usuario = '" + userMail + "' and password = '" + password + "'";
+            SQL = "SELECT * FROM Clientes where usuario = '" + userMail + "' and password = '" + password + "' and estado = 'A'";
         }
         try {
             rs = stmt.executeQuery(SQL);
@@ -160,7 +162,7 @@ public class ClienteDAO {
         try {
 
             if (rs.next()) {
-                Cliente cliente = new Cliente(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getDate(7), rs.getInt(8), rs.getString(9), rs.getString(10), rs.getInt(11), rs.getString(12), rs.getString(13), rs.getFloat(14));
+                Cliente cliente = new Cliente(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getDate(7), rs.getInt(8), rs.getString(9), rs.getString(10), rs.getInt(11), rs.getString(12), rs.getString(13), rs.getFloat(14), rs.getString(15));
                 return cliente;
             } else {
                 return null;
@@ -169,4 +171,79 @@ public class ClienteDAO {
             throw new ConexionException("No es posible acceder a los datos");
         }
     }
+
+    static public void bajaCliente(Long idCliente) throws ConexionException, AccesoException {
+
+        Connection con;
+
+        try {
+            con = ConnectionFactory.getInstancia().getConection();
+        } catch (ClassNotFoundException | SQLException e) {
+            throw new ConexionException("No esta disponible el acceso al Servidor");
+        }
+
+        PreparedStatement stm;
+        try {
+
+            stm = con.prepareStatement("UPDATE Clientes SET estado = 'B' where idCliente = ?");
+            stm.setLong(1, idCliente);
+
+        } catch (SQLException e) {
+            throw new AccesoException("Error de acceso");
+        }
+
+        try {
+            stm.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            throw new AccesoException("No se pudo guardar");
+        }
+
+    }
+
+    static public void actualizarCliente(Cliente c, Long idCliente) throws ConexionException, AccesoException {
+        Connection con;
+
+        try {
+            con = ConnectionFactory.getInstancia().getConection();
+        } catch (ClassNotFoundException | SQLException e) {
+            throw new ConexionException("No esta disponible el acceso al Servidor");
+        }
+
+        PreparedStatement stm;
+        try {
+
+            stm = con.prepareStatement("UPDATE Clientes SET nombre = ?, apellido = ?, usuario = ?, password = ?, nro_fiscal = ?, fecha_nacimiento = ?, telefono= ?, mail = ?,  domicilio = ?, altura = ?, localidad = ?, provincia = ?, valoracion = ?, estado = ? WHERE idCliente = ?");
+
+            stm.setString(1, c.getNombre());
+            stm.setString(2, c.getApellido());
+            stm.setString(3, c.getUsuario());
+            stm.setString(4, c.getPassword());
+            stm.setString(5, c.getNroFiscal());
+            stm.setDate(6, new java.sql.Date(c.getFechaNacimiento().getTime()));
+            stm.setString(7, String.valueOf(c.getTelefono()));
+            stm.setString(8, c.getMail());
+            stm.setString(9, c.getDomicilio());
+            stm.setInt(10, c.getAltura());
+            stm.setString(11, c.getLocalidad());
+            stm.setString(12, c.getProvincia());
+            stm.setFloat(13, 0.0F);
+            stm.setString(14, c.getEstado());
+            stm.setLong(15, idCliente);
+            
+
+        } catch (SQLException e) {
+            throw new AccesoException("Error de acceso");
+        }
+
+        try {
+            stm.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            throw new AccesoException("No se pudo guardar");
+        }
+    }
+
 }

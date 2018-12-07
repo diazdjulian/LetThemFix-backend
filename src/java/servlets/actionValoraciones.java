@@ -60,10 +60,11 @@ public class actionValoraciones extends HttpServlet {
             }
             
         
-        } else if ("GET".equals(request.getMethod()) && request.getParameter("idValorado") != null) {
+        } else if ("GET".equals(request.getMethod()) && request.getParameter("idValorado") != null
+                && request.getParameter("userType") != null) {
             List<Valoracion> listaValoraciones;
             try {
-                listaValoraciones = ValoracionDAO.obtenerValoraciones(Long.valueOf(request.getParameter("idValorado")));
+                listaValoraciones = ValoracionDAO.obtenerValoraciones(Long.valueOf(request.getParameter("idValorado")), request.getParameter("userType"));
                 responseToConsumer = new Gson().toJson(listaValoraciones);
                 response.setStatus(HttpServletResponse.SC_OK);
             } catch (ConexionException ex) {

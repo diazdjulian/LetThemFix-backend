@@ -86,10 +86,8 @@ public class actionPresupuestos extends HttpServlet {
             Gson params = new GsonBuilder().setDateFormat("DD/MM/YYYY").create();
             ProblemaUpdate p = params.fromJson(body, ProblemaUpdate.class);
 
-            String idPresupuesto = request.getParameter("idPresupuesto");
-            String idProblema = request.getParameter("idProblema");
             ServiciosImpl servicio = new ServiciosImpl();
-            servicio.aceptarPresupuesto(Long.parseLong(idProblema), Long.parseLong(idPresupuesto));
+            servicio.aceptarPresupuesto(p.getIdProblema(), p.getIdPresupuesto());
             
             responseToConsumer = new Gson().toJson("Presupuesto aceptado");
             response.setStatus(HttpServletResponse.SC_OK);

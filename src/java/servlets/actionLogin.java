@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import negocio.Cliente;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import dao.ClienteDAO;
 import java.lang.reflect.Type;
 import com.google.gson.reflect.TypeToken;
@@ -50,7 +51,7 @@ public class actionLogin extends HttpServlet {
             Gson gson = new Gson();
             myMap = gson.fromJson(body, type);
             Object user = null;
-           
+
             try {
                 user = ClienteDAO.login(myMap.get("email"), myMap.get("password"));
                 if (user == null) {
@@ -60,7 +61,7 @@ public class actionLogin extends HttpServlet {
                     responseToConsumer = new Gson().toJson(user);
                     response.setStatus(HttpServletResponse.SC_OK);
                 } else {
-                    responseToConsumer = new Gson().toJson("El usuario no existe");
+                    responseToConsumer = new Gson().toJson("{\"error\":\"Combinación usuario/contraseña incorrecta\"}");
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 }
             } catch (ConexionException ex) {

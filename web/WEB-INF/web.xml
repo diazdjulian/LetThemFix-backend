@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
+        <servlet-name>actionClientes</servlet-name>
+        <servlet-class>servlets.actionClientes</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>actionProfesionales</servlet-name>
         <servlet-class>servlets.actionProfesionales</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>actionRubros</servlet-name>
+        <servlet-class>servlets.actionRubros</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>actionLogin</servlet-name>
@@ -16,6 +24,19 @@
         <servlet-name>actionPresupuestos</servlet-name>
         <servlet-class>servlets.actionPresupuestos</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>actionValoraciones</servlet-name>
+        <servlet-class>servlets.actionValoraciones</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>actionRubros</servlet-name>
+        <url-pattern>/actionRubros</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>actionClientes</servlet-name>
+        <url-pattern>/actionClientes</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>actionLogin</servlet-name>
         <url-pattern>/actionLogin</url-pattern>
@@ -31,6 +52,10 @@
     <servlet-mapping>
         <servlet-name>actionPresupuestos</servlet-name>
         <url-pattern>/actionPresupuestos</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>actionValoraciones</servlet-name>
+        <url-pattern>/actionValoraciones</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

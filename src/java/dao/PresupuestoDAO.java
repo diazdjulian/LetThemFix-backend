@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import negocio.Cliente;
 import negocio.Presupuesto;
 
@@ -49,7 +51,7 @@ public class PresupuestoDAO {
         try {
 
             if (rs.next()) {
-                Presupuesto presupuesto = new Presupuesto(rs.getLong(1), rs.getString(2), rs.getFloat(3), rs.getInt(4), rs.getFloat(5), rs.getLong(6));
+                Presupuesto presupuesto = new Presupuesto(rs.getLong(1), rs.getString(2), rs.getFloat(3), rs.getInt(4), rs.getFloat(5), rs.getLong(6), rs.getLong(7));
                 return presupuesto;
             } else {
                 return null;
@@ -89,11 +91,11 @@ public class PresupuestoDAO {
 
         try {
             if (rs.next()) {
-                Presupuesto presupuesto = new Presupuesto(rs.getLong(1), rs.getString(2), rs.getFloat(3), rs.getInt(4), rs.getFloat(5), rs.getLong(6));
+                Presupuesto presupuesto = new Presupuesto(rs.getLong(1), rs.getString(2), rs.getFloat(3), rs.getInt(4), rs.getFloat(5), rs.getLong(6), rs.getLong(7));
                 problemaPresupuestos.add(presupuesto);
 
                 while(rs.next()) {
-                    presupuesto = new Presupuesto(rs.getLong(1), rs.getString(2), rs.getFloat(3), rs.getInt(4), rs.getFloat(5), rs.getLong(6));
+                    presupuesto = new Presupuesto(rs.getLong(1), rs.getString(2), rs.getFloat(3), rs.getInt(4), rs.getFloat(5), rs.getLong(6), rs.getLong(7));
                     problemaPresupuestos.add(presupuesto);
                 }
                 
@@ -118,12 +120,13 @@ public class PresupuestoDAO {
 
         PreparedStatement stm;
         try {
-            stm = con.prepareStatement("insert into Presupuestos values(?,?,?,?,?)");
+            stm = con.prepareStatement("insert into Presupuestos values(?,?,?,?,?,?)");
             stm.setString(1, presu.getObservacion());
             stm.setFloat(2, presu.getValor());
             stm.setInt(3, presu.getCantJornadasLaborables());
             stm.setFloat(4, presu.getValorMateriales());
             stm.setLong(5, presu.getIdProblema());
+            stm.setLong(6, presu.getIdProfesional());
 
         } catch (SQLException e) {
             throw new AccesoException("Error de acceso");
@@ -134,5 +137,33 @@ public class PresupuestoDAO {
         } catch (SQLException e) {
             throw new AccesoException("No se pudo guardar");
         }
+    }
+
+    static public void eliminarSegunProblema(int idProblema) throws ConexionException, AccesoException/*, ClienteException*/ {
+        try {
+            Connection con = null;
+            PreparedStatement stm;
+            ResultSet rs = null;
+
+            try {
+                con = ConnectionFactory.getInstancia().getConection();
+            } catch (ClassNotFoundException | SQLException e) {
+                System.out.println(e.getMessage());
+                throw new ConexionException("No esta disponible el acceso al Servidor");
+            }
+
+            stm = con.prepareStatement("DELETE FROM Presupuestos where idProblema = ?");
+            stm.setInt(1, idProblema);
+
+            try {
+                stm.execute();
+            } catch (SQLException e1) {
+                throw new AccesoException("Error de acceso");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ProblemaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 }

@@ -62,7 +62,7 @@ public class ValoracionDAO {
         }
     }
 
-    static public List<Valoracion> obtenerValoraciones(Long idValorado) throws ConexionException, AccesoException/*, ClienteException*/ {
+    static public List<Valoracion> obtenerValoraciones(Long idValorado, String tipoValorado) throws ConexionException, AccesoException/*, ClienteException*/ {
         Connection con = null;
         Statement stmt = null;
         ResultSet rs = null;
@@ -80,7 +80,7 @@ public class ValoracionDAO {
             throw new AccesoException("Error de acceso");
         }
 
-        String SQL = "SELECT  * FROM Valoraciones where idValorado = " + idValorado;
+        String SQL = "SELECT * FROM Valoraciones where idValorado = " + idValorado + " AND tipoValorado = '" + tipoValorado + "'";
 
         try {
             rs = stmt.executeQuery(SQL);
@@ -102,8 +102,6 @@ public class ValoracionDAO {
         }
     }
 
-    
-    
     static public Long grabarValoracion(Valoracion valoracion) throws ConexionException, AccesoException {
         Connection con;
 
@@ -116,7 +114,7 @@ public class ValoracionDAO {
 
         PreparedStatement stm;
         try {
-            stm = con.prepareStatement("insert into Valoraciones values(?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
+            stm = con.prepareStatement("INSERT INTO Valoraciones (idValorado, idValorador, tipoValorado, detalle, calificacion) VALUES(?,?,?,?,?)", PreparedStatement.RETURN_GENERATED_KEYS);
             stm.setLong(1, valoracion.getIdValorado());
             stm.setLong(2, valoracion.getIdValorador());
             stm.setString(3, valoracion.getTipoValorado());

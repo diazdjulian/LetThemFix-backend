@@ -78,7 +78,7 @@ public class RubroDAO {
         } catch (SQLException e1) {
             throw new AccesoException("Error de acceso");
         }
-        String SQL = "SELECT  * FROM Rubros";
+        String SQL = "SELECT * FROM Rubros";
         try {
             rs = stmt.executeQuery(SQL);
         } catch (SQLException e1) {

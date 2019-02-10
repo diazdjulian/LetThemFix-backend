@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class ConnectionFactory {
 
 	private static ConnectionFactory instancia;
-	String connectionUrl = "jdbc:sqlserver://localhost\\SQLEXPRESS:1433;databaseName=TPSIP-REAL2;user=usuarioAPI;password=API";
+	String connectionUrl = "jdbc:sqlserver://localhost\\\\SQLEXPRESS:1433;databaseName=TPSIP;user=SA;password=M00np4rk@SQL";
 //	String connectionUrl = "jdbc:sqlserver://localhost:1433;instance=SQLEXPRESS;databaseName=TPSIP;integratedSecurity=true;";
 	private ConnectionFactory() throws ClassNotFoundException{
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

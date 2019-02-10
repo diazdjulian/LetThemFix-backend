@@ -35,6 +35,7 @@ public class Cliente {
     private float calificacionPromedio;
     private List<Valoracion> valoraciones;
     private String estado;
+    private final String userType = "user";
     
     public Cliente(String nombre, String apellido, String usuario, String password, String nroFiscal, Date fechaNacimiento, int telefono, String mail, String domicilio, int altura, String localidad, String provincia) {
        
@@ -214,6 +215,8 @@ public class Cliente {
         this.estado = estado;
     }
 
-    
+    public String getUserType() {
+        return this.userType;
+    }
     
 }
